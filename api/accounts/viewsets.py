@@ -16,7 +16,7 @@ class AccountsViewSet(ModelViewSet):
         DjangoFilterBackend,
     ]
     filterset_fields = [
-        "id", "name", "email", "surname"
+        "id", "name", "email", "surname", "work_for"
     ]
     search_fields = ["id", "name", "email", "surname"]
     ordering_fields = ["id", "name", "email", "surname"]
