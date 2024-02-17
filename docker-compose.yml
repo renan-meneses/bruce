@@ -33,18 +33,18 @@ services:
     networks:
           - template01.network
 
-  web:
-    build:
-      context: .
-      dockerfile: Dockerfile
-    command: bash -c "python manage.py migrate && python manage.py runserver 0.0.0.0:8000"
-    networks:
-      - template01.network
-    volumes:
-      - .:/usr/src/app
-    ports:
-      - "8000:8000"
-    env_file:
-      - .env
-    depends_on:
-      - db
+  # web:
+  #   build:
+  #     context: .
+  #     dockerfile: Dockerfile
+  #   command: bash -c "python manage.py migrate && python manage.py runserver 0.0.0.0:8000"
+  #   networks:
+  #     - template01.network
+  #   volumes:
+  #     - .:/usr/src/app
+  #   ports:
+  #     - "8000:8000"
+  #   env_file:
+  #     - .env
+  #   depends_on:
+  #     - db
