@@ -133,6 +133,7 @@ USE_I18N = True
 USE_TZ = True
 
 
+
 # Password validation
 # https://docs.djangoproject.com/en/5.0/ref/settings/#auth-password-validators
 
@@ -171,6 +172,16 @@ SIMPLE_JWT = {
     "REFRESH_TOKEN_LIFETIME": timedelta(
         minutes=int(os.getenv("EXPIRE_REFRESH_TOKEN", 60))
     ),
+}
+
+SWAGGER_SETTINGS = {
+   'SECURITY_DEFINITIONS': {
+        'Bearer': {
+            'type': 'apiKey',
+            'name': 'Authorization',
+            'in': 'header'
+        }
+    }
 }
 
 PAGE_SIZE = os.environ.get("PAGE_SIZE", 25)

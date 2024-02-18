@@ -23,9 +23,9 @@ class CompaniesView(ModelViewSet):
         filters.OrderingFilter,
         DjangoFilterBackend,
     ]
-    filterset_fields = ["name", "client"]
-    search_fields = ["name"]
-    ordering_fields = ["name", "client"]
+    filterset_fields = ["name", "cnpj", "corporate_name", "fantasy_name", "user" ]
+    search_fields = ["name", "cnpj", "corporate_name", "fantasy_name", "user" ]
+    ordering_fields = ["name", "cnpj", "corporate_name", "fantasy_name", "user" ]
 
     def get_serializer_class(self):
 
