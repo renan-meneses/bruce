@@ -1,45 +1,72 @@
-from django.contrib.auth.models import (
-    AbstractBaseUser,
-    BaseUserManager,
-)
 from django.db import models
-from django.utils.translation import gettext_lazy as _
+from django.contrib.auth.models import BaseUserManager,AbstractBaseUser
 
+#  Custom User Manager
 class UserManager(BaseUserManager):
-    def _create_user(
-        self, name, email, password, surname, **extra_fields
-    ):
-        email = self.normalize_email(email)
-        user = self.model(
-            name=name,
-            email=email,
-            surname = surname,
-            password = password,
-            **extra_fields
-        )
-        user.save(using=self._db)
-        return user
+  def create_user(self, email, name, surname, password=None, password2=None):
+      """
+      Creates and saves a User with the given email, name, tc and password.
+      """
+      if not email:
+          raise ValueError('User must have an email address')
 
-    def create_superuser(self,name, email=None, password=None, surname=None, **extra_fields):
-        user = self._create_user(
-           name, email, password, surname, **extra_fields
-        )
-        user.save(using=self.db)
-        return user
+      user = self.model(
+          email=self.normalize_email(email),
+          name=name,
+          surname=surname,
+      )
 
+      user.set_password(password)
+      user.save(using=self._db)
+      return user
+
+  def create_superuser(self, email, name, tc, password=None):
+      """
+      Creates and saves a superuser with the given email, name, tc and password.
+      """
+      user = self.create_user(
+          email,
+          password=password,
+          name=name,
+          tc=tc,
+      )
+      user.is_admin = True
+      user.save(using=self._db)
+      return user
+
+#  Custom User Model
 class User(AbstractBaseUser):
-    name = models.CharField(_("name"), max_length=50)
-    surname = models.CharField(_("surname"), max_length=50)
-    email = models.EmailField(_("email address"), max_length=95, unique=True)
+  email = models.EmailField(
+      verbose_name='Email',
+      max_length=255,
+      unique=True,
+  )
+  name = models.CharField(max_length=200)
+  surname = models.CharField(max_length=200)
+  is_active = models.BooleanField(default=True)
+  is_admin = models.BooleanField(default=False)
+  created_at = models.DateTimeField(auto_now_add=True)
+  updated_at = models.DateTimeField(auto_now=True)
 
-    USERNAME_FIELD = "email"
-    REQUIRED_FIELDS = ["name", "surname"]
+  objects = UserManager()
 
-    objects = UserManager()
+  USERNAME_FIELD = 'email'
+  REQUIRED_FIELDS = ['name', 'surname']
 
-    class Meta:
-        verbose_name = _("user")
-        verbose_name_plural = _("users")
+  def __str__(self):
+      return self.email
 
-    def __str__(self):
-        return self.full_name
+  def has_perm(self, perm, obj=None):
+      "Does the user have a specific permission?"
+      return self.is_admin
+
+  def has_module_perms(self, app_label):
+      "Does the user have permissions to view the app `app_label`?"
+      return True
+
+  @property
+  def is_staff(self):
+      "Is the user a member of staff?"
+      return self.is_admin
+
+

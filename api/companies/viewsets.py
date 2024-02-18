@@ -6,15 +6,6 @@ from api.companies.repository import RepositoryCompanies
 from api.companies.serializers import CompaniesModel, CompaniesSerializer, CompaniescreatSerializer
 
 
-class BrandViewSet(ModelViewSet):
-    queryset = CompaniesModel.objects.all()
-    serializer_class = CompaniesSerializer
-
-    def create(self, request):
-        response = RepositoryCompanies.create_brand(self, request)
-        return response
-
-
 class CompaniesView(ModelViewSet):
 
     queryset = CompaniesModel.objects.all()

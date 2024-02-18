@@ -5,7 +5,7 @@ from rest_framework import routers
 from .viewsets import CompaniesView
 
 router = routers.DefaultRouter()
-router.register(r"", CompaniesView, "Companies")
+router.register(r"^", CompaniesView, "Companies")
 
 
-urlpatterns = [path("Companies/", include(router.urls))]
+urlpatterns = [path("companies", include(router.urls))]
